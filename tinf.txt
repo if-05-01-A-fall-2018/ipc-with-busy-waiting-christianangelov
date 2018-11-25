@@ -1,0 +1,58 @@
+1.)
+Race condition means, if two processes are in a queue at the same time, and both try to execute the commands, the slowest
+process overwrites the faster process, after that it looks like the faster process never existed because it has been overwritten.
+
+2.)
+I.) Only the Process which called it will be blocked for the time.
+II.) If it's a single core machine, the user process could block the other processes the whole time, that means that the PC freezes and
+there is no way to end the thread that blocks every other process.
+
+3.)
+I.) Scenario 1: Process 1 has to wait until the Process 0 calls leave_region(), after that the Process 1 can execute the commands (enter_region(), can get in the CR and do stuff...)
+Scenario 2: Process 0 has to wait till Process 1 has left the critical region, and Process 1 has to wait for Process 0 to leave it.
+
+II.) If the Processor is only a single core then after calling the method the first time the value of turn is set to 1. But because it's only a single core machine
+the turn will never be set to 0, so the thread goes into an infinite loop.
+
+III.)
+The loser variable is the latest called waiting process.
+
+
+IV.)
+
+#define ME 2
+
+while (True) {
+enter_region(ME);
+// access shared data
+leave_region(ME);
+}
+
+----------------------------------------------
+
+int loser
+Bool interested[3] 
+void enter_region(int process)
+{
+int other;
+int other2;
+if(process == 0)
+{
+	other = 1;
+	other2 = 2;
+}
+else if(process == 1)
+{
+	other = 0;
+	other2 = 2;
+}
+else if(process == 2)
+{
+	other = 0;
+	other = 1;
+}
+
+interested[process] = True;
+loser = process;
+while (loser == process && interested[other] || loser == process && interested[other2]) ;
+}
